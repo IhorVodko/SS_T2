@@ -35,8 +35,6 @@ public:
     string GetType() const;
     AnyType() = default;
     AnyType(FundamentalTypes data);
-    //prohibit constructor with a string, makes issues between char and string
-//    AnyType(string) = delete;
     //copy constructor
     AnyType(const AnyType&);
     //move constructor - compiler does not know how to move variant
