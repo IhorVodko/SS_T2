@@ -10,21 +10,17 @@ AnyType& AnyType::operator=(const Type& other) {
     int enum_index = GetEnumIndex(FixTypeidName(typeid(other).name()));
     if ((enum_index > TypeBegin) && (enum_index < TypeEnd))  {
         this->myData = other;
-        return *this;
     } else {
         cout << "Wrong type to store. Only int, unsigned int, long int, float, double, long double, char, bool.\n";
-        return *this;
     }
+    return *this;
 }
 
-//overloading of assignment operator, no throw
+//overloading of copy constructor operator
 AnyType& AnyType::operator=(const AnyType& other) {
-    if (this->myData == other.myData) {
-        return *this;
-    } else {
         this->myData = other.myData;
         return *this;
-    }
+
 }
 
 //definition of GetType() method
@@ -37,7 +33,7 @@ string AnyType::GetType() const {
 //definition of GetValue() method
 template<typename Type>
 Type AnyType::GetValue() const {
-    //create variable og type Type to compare to the stored variable type
+    //create variable of type Type to compare to the stored variable type
     Type t;
     if (this->GetType() == FixTypeidName(typeid(t).name())) {
         //variant::Type-based value accessor: If an arg holds the alternative T, returns a reference
@@ -45,6 +41,7 @@ Type AnyType::GetValue() const {
         Type value = get<Type>(myData);
         return value;
     }  else {
+        cout << "\nType of a stored variable is different from the requested type.\n";
         throw bad_cast();
     }
 }
@@ -97,7 +94,5 @@ const string FixTypeidName(const string &typeName) {
         return "char";
     } else if (type == typeid(bool).name()) {
         return "bool";
-    } else {
-        return "ERROR: Wrong type. Only int, unsigned int, long int, float, double, long double, char, bool";
     }
 }
