@@ -12,6 +12,7 @@
 #define ToChar GetValue<char>
 #define ToBool GetValue<bool>
 using namespace std;
+//safe to use form command line interface
 
 enum Type {
     TypeBegin = -1,
@@ -23,7 +24,8 @@ enum Type {
 //the class template std::variant represents a type-safe union
 using FundamentalTypes = variant<int, unsigned int, long int, float, double, long double,
                                 char, bool>;
-
+/*class stores single values of cpp fundamental types
+and provides a tye-safe access to the contained value*/
 class AnyType {
 private:
     FundamentalTypes myData;
@@ -35,10 +37,10 @@ public:
     string GetType() const;
     AnyType() = default;
     AnyType(FundamentalTypes data);
+//   prevent a class from constructing an object from a string, only char is allowed
+    AnyType(string) = delete;
     //copy constructor
     AnyType(const AnyType&);
-    //move constructor - compiler does not know how to move variant
-//    AnyType(const AnyType&&) = delete;
     template<typename Type>
     //copy assignment
     AnyType& operator=(const Type&);
@@ -47,6 +49,6 @@ public:
 };
 
 //Fix type_info::name method
-const string FixTypeidName(const string &typeName);
+const string FixTypeidName(const string& typeName);
 
 #include "AnyType.inl"
